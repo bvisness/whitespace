@@ -6,11 +6,8 @@ int yylex(void);
 %}
 
 %token SPACE TAB LF
-%token PROGRAM_END
 
 %%
-
-program: statement_sequence PROGRAM_END
 
 statement_sequence: statement
     | statement statement_sequence
@@ -53,6 +50,9 @@ flow_op: SPACE SPACE label // Mark location in the program
     | TAB SPACE label // Jump to a label if the top of the stack is zero
     | TAB TAB label // Jump to a label if the top of the stack is negative
     | TAB LF // End a subroutine and transfer control back to the caller
+    | LF LF { // End program
+        return 0;
+    }
 
 io_op: SPACE SPACE // Output the character at the top of the stack
     | SPACE TAB // Output the number at the top of the stack

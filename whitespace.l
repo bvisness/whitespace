@@ -6,10 +6,6 @@
 
 %%
 
-\n\n\n {
-    return PROGRAM_END;
-}
-
 [ ] {
     return SPACE;
 }
