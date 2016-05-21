@@ -68,7 +68,10 @@ void* execute(TreeNode* pNode) {
                 int sumSoFar;
                 digitRecursionCount++;
                 sumSoFar = (int) execute(pNode->pNextNode);
-                return (void*) (sumSoFar + twoToThe(digitRecursionCount - placesFromLeft));
+                if (pNode->digitLiteral) {
+                    sumSoFar += twoToThe(digitRecursionCount - placesFromLeft);
+                }
+                return (void*) sumSoFar;
             } else {
                 return (void*) pNode->digitLiteral;
             }
