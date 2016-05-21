@@ -10,7 +10,13 @@ int yylex(void);
 Stack* pStack;
 %}
 
+%union {
+    TreeNode* tnval;
+}
+
 %token SPACE TAB LF
+
+%type<tnval> number sign_bit digit_sequence digit
 
 %%
 
@@ -64,16 +70,35 @@ io_op: SPACE SPACE // Output the character at the top of the stack
     | TAB SPACE // Read a character and place it in the *location given by* the top of the stack
     | TAB TAB // Read a number and place it in the *location given by* the top of the stack
 
-number: sign_bit digit_sequence LF
+number: sign_bit digit_sequence LF {
+        $$ = createEmptyNode(NT_number);
+        $$->pFirstOperand = $1;
+        $$->pSecondOperand = $2;
+    }
 
-sign_bit: SPACE
-    | TAB
+sign_bit: SPACE {
+        $$ = createEmptyNode(NT_sign_bit);
+        $$->digitLiteral = 0;
+    }
+    | TAB {
+        $$ = createEmptyNode(NT_sign_bit);
+        $$->digitLiteral = 1;
+    }
 
 digit_sequence: digit
-    | digit digit_sequence
+    | digit digit_sequence {
+        $$ = $1;
+        $$->pNextNode = $2;
+    }
 
-digit: SPACE
-    | TAB
+digit: SPACE {
+        $$ = createEmptyNode(NT_digit);
+        $$->digitLiteral = 0;
+    }
+    | TAB {
+        $$ = createEmptyNode(NT_digit);
+        $$->digitLiteral = 1;
+    }
 
 label: label_char_sequence LF
 

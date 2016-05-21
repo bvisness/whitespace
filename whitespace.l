@@ -1,4 +1,5 @@
 %{
+#include "parsetree.h"
 #include "whitespace.tab.h"
 %}
 

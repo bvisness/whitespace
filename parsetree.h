@@ -2,6 +2,7 @@
 
 typedef enum NodeTypeTag
 {
+    // statements
     NT_stack_push,
     NT_stack_dup,
     NT_stack_copy,
@@ -24,16 +25,22 @@ typedef enum NodeTypeTag
     NT_io_output_char,
     NT_io_output_num,
     NT_io_read_char,
-    NT_io_read_num
+    NT_io_read_num,
+
+    // expressions
+    NT_number,
+    NT_sign_bit,
+    NT_digit
 } NodeType;
 
 typedef struct TreeNodeTag
 {
     NodeType type;
-    struct TreeNodeTag* pOperand;
-    short digitLiteral;
+    struct TreeNodeTag* pFirstOperand;
+    struct TreeNodeTag* pSecondOperand;
+    int digitLiteral;
     char charLiteral;
-    struct TreeNodeTag* pNextStatement;
+    struct TreeNodeTag* pNextNode;
 } TreeNode;
 
 TreeNode* createEmptyNode(NodeType type);
