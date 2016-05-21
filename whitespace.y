@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 
+#include "parsetree.h"
+
 int yyerror(char* s);
 int yylex(void);
 %}
