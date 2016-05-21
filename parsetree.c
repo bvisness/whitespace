@@ -4,6 +4,8 @@
 
 extern Stack* pStack;
 
+#define DEBUG 1
+
 //
 // Private functions
 //
@@ -51,8 +53,40 @@ void* execute(TreeNode* pNode) {
         return;
     }
 
+#if DEBUG
+    printf("Executing node of type %d\n", pNode->type);
+#endif
+
     switch (pNode->type) {
         // Statements - break so we can execute the next one
+        case NT_stack_push: {
+            int num = (int) execute(pNode->pFirstOperand);
+            push(pStack, num);
+        } break;
+        case NT_stack_dup: {
+            push(pStack, peek(pStack));
+        } break;
+        case NT_stack_copy: {
+            int howManyDown = (int) execute(pNode->pFirstOperand);
+            int val = pStack->values[pStack->topIndex - howManyDown];
+            push(pStack, val);
+        } break;
+        case NT_stack_swap: {
+            int first = pop(pStack);
+            int second = pop(pStack);
+            push(pStack, first);
+            push(pStack, second);
+        } break;
+        case NT_stack_discard: {
+            pop(pStack);
+        } break;
+        case NT_stack_slide: {
+            // TODO: What the hell does slide mean
+        } break;
+        case NT_flow_end_program: {
+            return NULL;
+        } break;
+
         // Expressions - return so we don't execute a next statement
         case NT_number: {
             digitRecursionCount = 0;
@@ -82,6 +116,8 @@ void* execute(TreeNode* pNode) {
         } break;
     }
 
+    printf("Stack: ");
+    printStack(pStack);
     execute(pNode->pNextNode);
 
     return NULL;

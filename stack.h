@@ -17,3 +17,5 @@ void push(Stack* stack, StackVal val);
 StackVal pop(Stack* stack);
 
 StackVal peek(Stack* stack);
+
+void printStack(Stack* stack);

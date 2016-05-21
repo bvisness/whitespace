@@ -72,3 +72,15 @@ StackVal peek(Stack* stack) {
 
     return stack->values[stack->topIndex];
 }
+
+void printStack(Stack* stack) {
+    int i;
+    for (i = 0; i <= stack->topIndex; i++) {
+        if (i > 0) {
+            printf(", ");
+        }
+
+        printf("%d", stack->values[i]);
+    }
+    printf("\n");
+}
