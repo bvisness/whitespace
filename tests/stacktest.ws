@@ -4,6 +4,8 @@ DiscardTopItem:
 
 Push-3OntoTheStack:  			
 SwapTopTwoItems: 
-	End:
+	DupTop: 
+ Copy-3BackToTop: 	  	 
+End:
 
 
