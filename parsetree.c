@@ -1,4 +1,5 @@
-#include <stddef.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "stack.h"
 #include "parsetree.h"
 

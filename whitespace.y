@@ -202,7 +202,7 @@ label_char: SPACE {
 %%
 
 extern FILE* yyin;
-main(int argc, char** argv) {
+int main(int argc, char** argv) {
     char* filename = NULL;
     int i;
 
