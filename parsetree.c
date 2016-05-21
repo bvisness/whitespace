@@ -1,5 +1,8 @@
 #include <stddef.h>
+#include "stack.h"
 #include "parsetree.h"
+
+extern Stack* pStack;
 
 TreeNode* createEmptyNode(NodeType type) {
     TreeNode* result = malloc(sizeof(TreeNode));

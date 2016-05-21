@@ -1,10 +1,13 @@
 %{
 #include <stdio.h>
 
+#include "stack.h"
 #include "parsetree.h"
 
 int yyerror(char* s);
 int yylex(void);
+
+Stack* pStack;
 %}
 
 %token SPACE TAB LF
@@ -101,7 +104,11 @@ main(int argc, char** argv) {
         yyin = stdin;
     }
 
+    pStack = createEmptyStack();
+
     yyparse();
+
+    freeStack(pStack);
 }
 
 int yyerror(char* errorMessage) {
