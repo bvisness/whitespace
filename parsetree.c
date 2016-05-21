@@ -50,7 +50,7 @@ void freeNode(TreeNode* pNode) {
 int digitRecursionCount;
 void* execute(TreeNode* pNode) {
     if (!pNode) {
-        return;
+        return NULL;
     }
 
 #if DEBUG
@@ -83,6 +83,33 @@ void* execute(TreeNode* pNode) {
         case NT_stack_slide: {
             // TODO: What the hell does slide mean
         } break;
+
+        case NT_arithmetic_add: {
+            int right = pop(pStack);
+            int left = pop(pStack);
+            push(pStack, left + right);
+        } break;
+        case NT_arithmetic_subtract: {
+            int right = pop(pStack);
+            int left = pop(pStack);
+            push(pStack, left - right);
+        } break;
+        case NT_arithmetic_multiply: {
+            int right = pop(pStack);
+            int left = pop(pStack);
+            push(pStack, left * right);
+        } break;
+        case NT_arithmetic_divide: {
+            int right = pop(pStack);
+            int left = pop(pStack);
+            push(pStack, left / right);
+        } break;
+        case NT_arithmetic_mod: {
+            int right = pop(pStack);
+            int left = pop(pStack);
+            push(pStack, left % right);
+        } break;
+
         case NT_flow_end_program: {
             return NULL;
         } break;
@@ -95,7 +122,7 @@ void* execute(TreeNode* pNode) {
                 value *= -1;
             }
             return (void*) value;
-        } return;
+        } return NULL;
         case NT_digit: {
             int placesFromLeft = digitRecursionCount;
             if (pNode->pNextNode) {
@@ -109,15 +136,17 @@ void* execute(TreeNode* pNode) {
             } else {
                 return (void*) pNode->digitLiteral;
             }
-        } return;
+        } return NULL;
         
         default: {
             printf("Cannot execute node with unrecognized type %d\n", pNode->type);
         } break;
     }
 
+#if DEBUG
     printf("Stack: ");
     printStack(pStack);
+#endif
     execute(pNode->pNextNode);
 
     return NULL;
