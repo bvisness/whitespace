@@ -5,7 +5,7 @@
 
 extern Stack* pStack;
 
-#define DEBUG 1
+#define DEBUG 0
 
 //
 // Private functions
@@ -113,6 +113,14 @@ void* execute(TreeNode* pNode) {
 
         case NT_flow_end_program: {
             return NULL;
+        } break;
+
+        case NT_io_output_char: {
+            // TODO: Peek or pop? Same below
+            printf("%c", pop(pStack));
+        } break;
+        case NT_io_output_num: {
+            printf("%d", pop(pStack));
         } break;
 
         // Expressions - return so we don't execute a next statement

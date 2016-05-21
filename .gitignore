@@ -4,3 +4,4 @@
 *.yy.c
 whitespace.dSYM
 whitespace
+*.out
