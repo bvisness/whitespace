@@ -30,7 +30,9 @@ typedef enum NodeTypeTag
     // expressions
     NT_number,
     NT_sign_bit,
-    NT_digit
+    NT_digit,
+    NT_label,
+    NT_label_char
 } NodeType;
 
 typedef struct TreeNodeTag

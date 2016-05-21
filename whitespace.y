@@ -8,6 +8,7 @@ int yyerror(char* s);
 int yylex(void);
 
 Stack* pStack;
+TreeNode* pHeadNode;
 %}
 
 %union {
@@ -16,12 +17,20 @@ Stack* pStack;
 
 %token SPACE TAB LF
 
+%type<tnval> statement statement_sequence
+%type<tnval> stack_statement arithmetic_statement heap_statement flow_statement io_statement
+%type<tnval> stack_op arithmetic_op heap_op flow_op io_op
 %type<tnval> number sign_bit digit_sequence digit
+%type<tnval> label label_char_sequence label_char
 
 %%
 
 statement_sequence: statement
-    | statement statement_sequence
+    | statement statement_sequence {
+        $$ = $1;
+        $$->pNextNode = $2;
+        pHeadNode = $$;
+    }
 
 statement: stack_statement
     | arithmetic_statement
@@ -29,46 +38,110 @@ statement: stack_statement
     | flow_statement
     | io_statement
 
-stack_statement: SPACE stack_op
+stack_statement: SPACE stack_op {
+        $$ = $2;
+    }
 
-arithmetic_statement: TAB SPACE arithmetic_op
+arithmetic_statement: TAB SPACE arithmetic_op {
+        $$ = $3;
+    }
 
-heap_statement: TAB TAB heap_op
+heap_statement: TAB TAB heap_op {
+        $$ = $3;
+    }
 
-flow_statement: LF flow_op
+flow_statement: LF flow_op {
+        $$ = $2;
+    }
 
-io_statement: TAB LF io_op
+io_statement: TAB LF io_op {
+        $$ = $3;
+    }
 
-stack_op: SPACE number // push a number onto the stack
-    | LF SPACE // duplicate the item on top of the stack
-    | TAB SPACE number // copy the nth item on the stack onto the top of the stack
-    | LF TAB // Swap the top two items on the stack
-    | LF LF // Discard the top item on the stack
-    | TAB LF number // Slide n items off the stack, keeping the top item
+stack_op: SPACE number { // push a number onto the stack
+        $$ = createEmptyNode(NT_stack_push);
+        $$->pFirstOperand = $2;
+    }
+    | LF SPACE { // duplicate the item on top of the stack
+        $$ = createEmptyNode(NT_stack_dup);
+    }
+    | TAB SPACE number { // copy the nth item on the stack onto the top of the stack
+        $$ = createEmptyNode(NT_stack_copy);
+        $$->pFirstOperand = $3;
+    }
+    | LF TAB { // Swap the top two items on the stack
+        $$ = createEmptyNode(NT_stack_swap);
+    }
+    | LF LF { // Discard the top item on the stack
+        $$ = createEmptyNode(NT_stack_discard);
+    }
+    | TAB LF number { // Slide n items off the stack, keeping the top item
+        $$ = createEmptyNode(NT_stack_slide);
+        $$->pFirstOperand = $3;
+    }
 
-arithmetic_op: SPACE SPACE // Addition
-    | SPACE TAB // Subtraction
-    | SPACE LF // Multiplication
-    | TAB SPACE // Integer division
-    | TAB TAB // Modulo
+arithmetic_op: SPACE SPACE { // Addition
+        $$ = createEmptyNode(NT_arithmetic_add);
+    }
+    | SPACE TAB { // Subtraction
+        $$ = createEmptyNode(NT_arithmetic_subtract);
+    }
+    | SPACE LF { // Multiplication
+        $$ = createEmptyNode(NT_arithmetic_multiply);
+    }
+    | TAB SPACE { // Integer division
+        $$ = createEmptyNode(NT_arithmetic_divide);
+    }
+    | TAB TAB { // Modulo
+        $$ = createEmptyNode(NT_arithmetic_mod);
+    }
 
-heap_op: SPACE // Heap store
-    | TAB // Heap retrieve
+heap_op: SPACE { // Heap store
+        $$ = createEmptyNode(NT_heap_store);
+    }
+    | TAB { // Heap retrieve
+        $$ = createEmptyNode(NT_heap_retrieve);
+    }
 
-flow_op: SPACE SPACE label // Mark location in the program
-    | SPACE TAB label // Call a subroutine
-    | SPACE LF label // Jump unconditionally to a label
-    | TAB SPACE label // Jump to a label if the top of the stack is zero
-    | TAB TAB label // Jump to a label if the top of the stack is negative
-    | TAB LF // End a subroutine and transfer control back to the caller
+flow_op: SPACE SPACE label { // Mark location in the program
+        $$ = createEmptyNode(NT_flow_mark);
+        $$->pFirstOperand = $3;
+    }
+    | SPACE TAB label { // Call a subroutine
+        $$ = createEmptyNode(NT_flow_call);
+        $$->pFirstOperand = $3;
+    }
+    | SPACE LF label { // Jump unconditionally to a label
+        $$ = createEmptyNode(NT_flow_jump);
+        $$->pFirstOperand = $3;
+    }
+    | TAB SPACE label { // Jump to a label if the top of the stack is zero
+        $$ = createEmptyNode(NT_flow_jump_if_zero);
+        $$->pFirstOperand = $3;
+    }
+    | TAB TAB label { // Jump to a label if the top of the stack is negative
+        $$ = createEmptyNode(NT_flow_jump_if_negative);
+        $$->pFirstOperand = $3;
+    }
+    | TAB LF { // End a subroutine and transfer control back to the caller
+        $$ = createEmptyNode(NT_flow_end_subroutine);
+    }
     | LF LF { // End program
         return 0;
     }
 
-io_op: SPACE SPACE // Output the character at the top of the stack
-    | SPACE TAB // Output the number at the top of the stack
-    | TAB SPACE // Read a character and place it in the *location given by* the top of the stack
-    | TAB TAB // Read a number and place it in the *location given by* the top of the stack
+io_op: SPACE SPACE { // Output the character at the top of the stack
+        $$ = createEmptyNode(NT_io_output_char);
+    }
+    | SPACE TAB { // Output the number at the top of the stack
+        $$ = createEmptyNode(NT_io_output_num);
+    }
+    | TAB SPACE { // Read a character and place it in the *location given by* the top of the stack
+        $$ = createEmptyNode(NT_io_read_char);
+    }
+    | TAB TAB { // Read a number and place it in the *location given by* the top of the stack
+        $$ = createEmptyNode(NT_io_read_num);
+    }
 
 number: sign_bit digit_sequence LF {
         $$ = createEmptyNode(NT_number);
@@ -100,13 +173,25 @@ digit: SPACE {
         $$->digitLiteral = 1;
     }
 
-label: label_char_sequence LF
+label: label_char_sequence LF {
+        $$ = createEmptyNode(NT_label);
+        $$->pFirstOperand = $1;
+    }
 
 label_char_sequence: label_char
-    | label_char label_char_sequence
+    | label_char label_char_sequence {
+        $$ = $1;
+        $$->pNextNode = $2;
+    }
 
-label_char: SPACE
-    | TAB
+label_char: SPACE {
+        $$ = createEmptyNode(NT_label_char);
+        $$->charLiteral = ' ';
+    }
+    | TAB {
+        $$ = createEmptyNode(NT_label_char);
+        $$->charLiteral = '\t';
+    }
 
 %%
 
@@ -129,11 +214,15 @@ main(int argc, char** argv) {
         yyin = stdin;
     }
 
-    pStack = createEmptyStack();
-
     yyparse();
 
+    pStack = createEmptyStack();
+    execute(pHeadNode);
+
     freeStack(pStack);
+    freeNode(pHeadNode);
+
+    return 0;
 }
 
 int yyerror(char* errorMessage) {
