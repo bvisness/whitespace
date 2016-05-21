@@ -25,11 +25,17 @@ TreeNode* pHeadNode;
 
 %%
 
-statement_sequence: statement
+statement_sequence: statement {
+        $$ = $1;
+        pHeadNode = $$;
+    }
     | statement statement_sequence {
         $$ = $1;
         $$->pNextNode = $2;
         pHeadNode = $$;
+        if ($$->type == NT_flow_end_program) {
+            return 0;
+        }
     }
 
 statement: stack_statement
@@ -127,7 +133,7 @@ flow_op: SPACE SPACE label { // Mark location in the program
         $$ = createEmptyNode(NT_flow_end_subroutine);
     }
     | LF LF { // End program
-        return 0;
+        $$ = createEmptyNode(NT_flow_end_program);
     }
 
 io_op: SPACE SPACE { // Output the character at the top of the stack
