@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>ws</string>
+	</array>
+	<key>name</key>
+	<string>Whitespace</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>match</key>
+			<string>( )</string>
+			<key>name</key>
+			<string>keyword.control.space</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\t</string>
+			<key>name</key>
+			<string>keyword.control.tab</string>
+		</dict>
+		<dict>
+			<key>match</key>
+			<string>\n</string>
+			<key>name</key>
+			<string>keyword.control.linefeed</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.whitespace</string>
+	<key>uuid</key>
+	<string>bbe1ce94-a92d-4a68-b784-171fbca9efdd</string>
+</dict>
+</plist>

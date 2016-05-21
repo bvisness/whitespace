@@ -1,0 +1,12 @@
+{
+    "extensions": [
+        "ws"
+    ],
+    "translate_tabs_to_spaces": false,
+    "detect_indentation": false,
+    "use_tab_stops": false,
+    "auto_indent": false,
+    "smart_indent": false,
+    "trim_automatic_white_space": false,
+    "indent_to_bracket": false
+}
