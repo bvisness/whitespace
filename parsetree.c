@@ -1,9 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "stack.h"
+#include "heap.h"
 #include "parsetree.h"
 
 extern Stack* pStack;
+extern Heap* pHeap;
 
 #define DEBUG 0
 
@@ -109,6 +111,16 @@ void* execute(TreeNode* pNode) {
             int right = pop(pStack);
             int left = pop(pStack);
             push(pStack, left % right);
+        } break;
+
+        case NT_heap_store: {
+            int value = pop(pStack);
+            int address = pop(pStack);
+            store(pHeap, address, value);
+        } break;
+        case NT_heap_retrieve: {
+            int address = pop(pStack);
+            push(pStack, read(pHeap, address));
         } break;
 
         case NT_flow_end_program: {

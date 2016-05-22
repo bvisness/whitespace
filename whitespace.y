@@ -2,12 +2,14 @@
 #include <stdio.h>
 
 #include "stack.h"
+#include "heap.h"
 #include "parsetree.h"
 
 int yyerror(char* s);
 int yylex(void);
 
 Stack* pStack;
+Heap* pHeap;
 TreeNode* pHeadNode;
 %}
 
@@ -223,9 +225,11 @@ int main(int argc, char** argv) {
     yyparse();
 
     pStack = createEmptyStack();
+    pHeap = createEmptyHeap();
     execute(pHeadNode);
 
     freeStack(pStack);
+    freeHeap(pHeap);
     freeNode(pHeadNode);
 
     return 0;
