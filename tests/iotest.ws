@@ -6,6 +6,14 @@ Output10(newline):
 OutputA:	
   PushAnotherNewline:   	 	 
 OutputIt:	
-  End:
+  PutAddress1OnStack:   	
+ReadCharFromInput:	
+	 PutAddress1OnStackAgain:   	
+RetrieveFromHeap:			OutputTheChar:	
+  PutAddress2OnStack:   	 
+ReadNumFromInput:	
+		Put2OnStackAgain:   	 
+RetrieveFromHeap:			OutputTheNum:	
+ 	End:
 
 

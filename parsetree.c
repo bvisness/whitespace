@@ -134,6 +134,17 @@ void* execute(TreeNode* pNode) {
         case NT_io_output_num: {
             printf("%d", pop(pStack));
         } break;
+        case NT_io_read_char: {
+            int address = pop(pStack);
+            char c = getchar();
+            store(pHeap, address, c);
+        } break;
+        case NT_io_read_num: {
+            int address = pop(pStack);
+            int num;
+            scanf("%d", &num);
+            store(pHeap, address, num);
+        } break;
 
         // Expressions - return so we don't execute a next statement
         case NT_number: {
