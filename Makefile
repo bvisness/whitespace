@@ -10,3 +10,6 @@ whitespace.yy.c: whitespace.l
 
 stacktest:
 	gcc -o stacktest.exe tests\stacktest.c stack.c
+
+linkedlisttest:
+	gcc -o linkedlisttest tests\linkedlisttest.c linkedlist.c
