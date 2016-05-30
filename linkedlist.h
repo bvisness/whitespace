@@ -19,7 +19,7 @@ typedef struct LinkedListFindResultTag {
     int index;
 } LinkedListFindResult;
 
-typedef int (*llFindFunc)(LinkedListNode* a);
+typedef int (*llFindFunc)(LinkedListNode* node);
 
 LinkedList* newList();
 
@@ -32,6 +32,6 @@ void removeAtIndex(LinkedList* pList, int index);
 
 LinkedListNode* get(LinkedList* pList, int index);
 LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc);
-int contains(LinkedList* pList, void* data, llFindFunc findFunc);
+int contains(LinkedList* pList, llFindFunc findFunc);
 
 void freeList(LinkedList* pList);

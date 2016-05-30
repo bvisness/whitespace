@@ -204,7 +204,23 @@ void removeAtIndex(LinkedList* pList, int index) {
     pList->length--;
 }
 
-int contains(LinkedList* pList, void* data, llFindFunc findFunc);
+LinkedListNode* get(LinkedList* pList, int indexToGet) {
+    LinkedListNode* result;
+    int i;
+
+    // TODO: This could be optimized by starting from the tail in some circumstances
+
+    if (indexToGet < 0 || indexToGet >= pList->length) {
+        return NULL;
+    }
+
+    result = pList->pHead;
+    for (i = 0; i < indexToGet; i++) {
+        result = result->pAfter;
+    }
+
+    return result;
+}
 
 LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc) {
     LinkedListFindResult result;
@@ -228,24 +244,11 @@ LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc) {
     return result;
 }
 
-LinkedListNode* get(LinkedList* pList, int indexToGet) {
-    LinkedListNode* result;
-    int i;
-
-    // TODO: This could be optimized by starting from the tail in some circumstances
-
-    if (indexToGet < 0 || indexToGet >= pList->length) {
-        return NULL;
-    }
-
-    result = pList->pHead;
-    for (i = 0; i < indexToGet; i++) {
-        result = result->pAfter;
-    }
-
-    return result;
+int contains(LinkedList* pList, llFindFunc findFunc) {
+    return find(pList, findFunc).index != -1;
 }
 
+// TODO: Test this once I have a computer with valgrind
 void freeList(LinkedList* pList) {
     LinkedListNode* currentNode = pList->pHead;
     LinkedListNode* nextNode;

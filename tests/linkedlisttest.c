@@ -4,6 +4,9 @@
 
 #include "../linkedlist.h"
 
+//
+// Utilities
+//
 void printNumberList(LinkedList* pList) {
     int i;
 
@@ -18,6 +21,17 @@ void printNumberList(LinkedList* pList) {
     printf("\n");
 }
 
+int nodeContains2(LinkedListNode* node) {
+    return (int) (node->data) == 2;
+}
+
+int findFuncFail(LinkedListNode* node) {
+    return 0;
+}
+
+//
+// Tests
+//
 void testNewList() {
     printf("Testing new list\n");
 
@@ -217,6 +231,40 @@ void testRemoveAtIndex() {
     printNumberList(list);
 }
 
+void testFind() {
+    LinkedList* list;
+
+    printf("Testing find\n");
+
+    list = newList();
+    addAtTail(list, (void*) 1);
+    addAtTail(list, (void*) 2);
+    addAtTail(list, (void*) 3);
+
+    LinkedListFindResult find2 = find(list, &nodeContains2);
+
+    assert(find2.pNode == list->pHead->pAfter);
+
+    LinkedListFindResult findFail = find(list, &findFuncFail);
+
+    assert(findFail.pNode == NULL);
+    assert(findFail.index == -1);
+}
+
+void testContains() {
+    LinkedList* list;
+
+    printf("Testing contains\n");
+
+    list = newList();
+    addAtTail(list, (void*) 1);
+    addAtTail(list, (void*) 2);
+    addAtTail(list, (void*) 3);
+
+    assert(contains(list, &nodeContains2));
+    assert(!contains(list, &findFuncFail));
+}
+
 int main() {
     testNewList();
     testGet();
@@ -226,4 +274,6 @@ int main() {
     testRemoveAtHead();
     testRemoveAtTail();
     testRemoveAtIndex();
+    testFind();
+    testContains();
 }
