@@ -32,7 +32,7 @@ LinkedList* newList() {
     result->pHead = NULL;
     result->pTail = NULL;
     result->length = 0;
-    result->dataCanBeFreed = 1;
+    result->dataCanBeFreed = 0;
 
     return result;
 }

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 
 #include "../linkedlist.h"
@@ -8,10 +9,10 @@ void printNumberList(LinkedList* pList) {
 
     printf("Length %d, Head %p, Tail %p\n", pList->length, pList->pHead, pList->pTail);
     if (pList->length > 0) {
-        printf("%d", get(pList, 0)->data);
+        printf("%d", (int) get(pList, 0)->data);
     }
     for (i = 1; i < pList->length; i++) {
-        printf(", %d", get(pList, i)->data);
+        printf(", %d", (int) get(pList, i)->data);
     }
 
     printf("\n");

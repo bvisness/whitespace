@@ -9,7 +9,7 @@ whitespace.yy.c: whitespace.l
 	flex -owhitespace.yy.c whitespace.l
 
 stacktest:
-	gcc -o stacktest.exe tests\stacktest.c stack.c
+	gcc -o stacktest.exe tests/stacktest.c stack.c -g
 
-linkedlisttest:
-	gcc -o linkedlisttest tests\linkedlisttest.c linkedlist.c
+linkedlisttest: linkedlist.c tests/linkedlisttest.c
+	gcc -o linkedlisttest tests/linkedlisttest.c linkedlist.c -g
