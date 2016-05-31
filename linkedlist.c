@@ -15,11 +15,11 @@ LinkedListNode* newNode(void* data) {
     return newNode;
 }
 
-void freeNode(LinkedListNode* node) {
+void freeListNode(LinkedListNode* node) {
     free(node);
 }
 
-void freeNodeAndData(LinkedListNode* node) {
+void freeListNodeAndData(LinkedListNode* node) {
     free(node->data);
     free(node);
 }
@@ -134,9 +134,9 @@ void removeAtHead(LinkedList* pList) {
     pList->pHead = nodeToDelete->pAfter;
 
     if (pList->dataCanBeFreed) {
-        freeNodeAndData(nodeToDelete);
+        freeListNodeAndData(nodeToDelete);
     } else {
-        freeNode(nodeToDelete);
+        freeListNode(nodeToDelete);
     }
 
     pList->length--;
@@ -162,9 +162,9 @@ void removeAtTail(LinkedList* pList) {
     pList->pTail = nodeToDelete->pBefore;
 
     if (pList->dataCanBeFreed) {
-        freeNodeAndData(nodeToDelete);
+        freeListNodeAndData(nodeToDelete);
     } else {
-        freeNode(nodeToDelete);
+        freeListNode(nodeToDelete);
     }
 
     pList->length--;
@@ -196,9 +196,9 @@ void removeAtIndex(LinkedList* pList, int index) {
     nodeToDelete->pAfter->pBefore = nodeToDelete->pBefore;
 
     if (pList->dataCanBeFreed) {
-        freeNodeAndData(nodeToDelete);
+        freeListNodeAndData(nodeToDelete);
     } else {
-        freeNode(nodeToDelete);
+        freeListNode(nodeToDelete);
     }
 
     pList->length--;
@@ -257,9 +257,9 @@ void freeList(LinkedList* pList) {
         nextNode = currentNode->pAfter;
 
         if (pList->dataCanBeFreed) {
-            freeNodeAndData(currentNode);
+            freeListNodeAndData(currentNode);
         } else {
-            freeNode(currentNode);
+            freeListNode(currentNode);
         }
 
         currentNode = nextNode;
