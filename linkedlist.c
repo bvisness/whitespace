@@ -222,7 +222,7 @@ LinkedListNode* get(LinkedList* pList, int indexToGet) {
     return result;
 }
 
-LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc) {
+LinkedListFindResult find(LinkedList* pList, void* matchData, llDataFunc dataFunc) {
     LinkedListFindResult result;
     LinkedListNode* currentNode = pList->pHead;
     int index = 0;
@@ -231,7 +231,7 @@ LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc) {
     result.index = -1;
 
     while (currentNode != NULL) {
-        if (findFunc(currentNode)) {
+        if (dataFunc(currentNode) == matchData) {
             result.pNode = currentNode;
             result.index = index;
             break;
@@ -244,8 +244,8 @@ LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc) {
     return result;
 }
 
-int contains(LinkedList* pList, llFindFunc findFunc) {
-    return find(pList, findFunc).index != -1;
+int contains(LinkedList* pList, void* matchData, llDataFunc dataFunc) {
+    return find(pList, matchData, dataFunc).index != -1;
 }
 
 // TODO: Test this once I have a computer with valgrind

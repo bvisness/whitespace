@@ -21,12 +21,8 @@ void printNumberList(LinkedList* pList) {
     printf("\n");
 }
 
-int nodeContains2(LinkedListNode* node) {
-    return (int) (node->data) == 2;
-}
-
-int findFuncFail(LinkedListNode* node) {
-    return 0;
+void* plainDataFunc(LinkedListNode* node) {
+    return node->data;
 }
 
 //
@@ -241,11 +237,11 @@ void testFind() {
     addAtTail(list, (void*) 2);
     addAtTail(list, (void*) 3);
 
-    LinkedListFindResult find2 = find(list, &nodeContains2);
+    LinkedListFindResult find2 = find(list, (void*) 2, &plainDataFunc);
 
     assert(find2.pNode == list->pHead->pAfter);
 
-    LinkedListFindResult findFail = find(list, &findFuncFail);
+    LinkedListFindResult findFail = find(list, (void*) -1, &plainDataFunc);
 
     assert(findFail.pNode == NULL);
     assert(findFail.index == -1);
@@ -261,8 +257,8 @@ void testContains() {
     addAtTail(list, (void*) 2);
     addAtTail(list, (void*) 3);
 
-    assert(contains(list, &nodeContains2));
-    assert(!contains(list, &findFuncFail));
+    assert(contains(list, (void*) 2, &plainDataFunc));
+    assert(!contains(list, (void*) -1, &plainDataFunc));
 }
 
 int main() {

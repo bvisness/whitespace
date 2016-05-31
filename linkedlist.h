@@ -19,7 +19,7 @@ typedef struct LinkedListFindResultTag {
     int index;
 } LinkedListFindResult;
 
-typedef int (*llFindFunc)(LinkedListNode* node);
+typedef void* (*llDataFunc)(LinkedListNode* node);
 
 LinkedList* newList();
 
@@ -30,8 +30,10 @@ void removeAtHead(LinkedList* pList);
 void removeAtTail(LinkedList* pList);
 void removeAtIndex(LinkedList* pList, int index);
 
+// No head and tail methods provided. Access them via the LinkedList
+// struct itself.
 LinkedListNode* get(LinkedList* pList, int index);
-LinkedListFindResult find(LinkedList* pList, llFindFunc findFunc);
-int contains(LinkedList* pList, llFindFunc findFunc);
+LinkedListFindResult find(LinkedList* pList, void* matchData, llDataFunc dataFunc);
+int contains(LinkedList* pList, void* matchData, llDataFunc dataFunc);
 
 void freeList(LinkedList* pList);
