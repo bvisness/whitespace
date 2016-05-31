@@ -1,5 +1,7 @@
 #pragma once
 
+#include "linkedlist.h"
+
 typedef int HeapVal;
 
 typedef struct HeapEntryTag {
@@ -8,9 +10,7 @@ typedef struct HeapEntryTag {
 } HeapEntry;
 
 typedef struct HeapTag {
-    HeapEntry* entries;
-    int capacity;
-    int numEntries;
+    LinkedList* pList;
 } Heap;
 
 Heap* createEmptyHeap(void);

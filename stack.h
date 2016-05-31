@@ -1,11 +1,11 @@
 #pragma once
 
+#include "linkedlist.h"
+
 typedef int StackVal;
 
 typedef struct StackTag {
-    StackVal* values;
-    int capacity;
-    int topIndex;
+    LinkedList* pList;
 } Stack;
 
 Stack* createEmptyStack(void);

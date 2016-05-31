@@ -71,7 +71,7 @@ void* execute(TreeNode* pNode) {
         } break;
         case NT_stack_copy: {
             int howManyDown = (int) execute(pNode->pFirstOperand);
-            int val = pStack->values[pStack->topIndex - howManyDown];
+            int val = (int) (get(pStack->pList, howManyDown)->data);
             push(pStack, val);
         } break;
         case NT_stack_swap: {

@@ -21,14 +21,6 @@ int main() {
     store(heap1, 123, 13);
     printHeap(heap1);
 
-    printf("Starting capacity of heap: %d\n", heap2->capacity);
-    for (i = 0; i < 256; i++) {
-        store(heap2, i, i);
-    }
-    printf("Capacity after 256 inserts (should be same as above): %d\n", heap2->capacity);
-    store(heap2, 257, 257);
-    printf("Capacity after one more insert (should be double starting): %d\n", heap2->capacity);
-
     freeHeap(heap1);
     freeHeap(heap2);
     return 0;

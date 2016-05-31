@@ -3,27 +3,11 @@
 
 #include "stack.h"
 
-#define STACK_MIN_SIZE 256
-
 //
 // Private functions
 //
 int numItemsInStack(Stack* stack) {
-    return stack->topIndex + 1;
-}
-
-void expandStack(Stack* stack) {
-    int newCapacity = 2 * stack->capacity;
-    StackVal* newValues = malloc(newCapacity * sizeof(StackVal));
-    int i;
-
-    for (i = 0; i < stack->capacity; i++) {
-        newValues[i] = stack->values[i];
-    }
-
-    free(stack->values);
-    stack->values = newValues;
-    stack->capacity = newCapacity;
+    return stack->pList->length;
 }
 
 //
@@ -31,25 +15,18 @@ void expandStack(Stack* stack) {
 //
 Stack* createEmptyStack(void) {
     Stack* result = malloc(sizeof(Stack));
-    result->values = malloc(STACK_MIN_SIZE * sizeof(StackVal));
-    result->capacity = STACK_MIN_SIZE;
-    result->topIndex = -1;
+    result->pList = newList();
 
     return result;
 }
 
 void freeStack(Stack* stack) {
-    free(stack->values);
+    freeList(stack->pList);
     free(stack);
 }
 
 void push(Stack* stack, StackVal val) {
-    if (numItemsInStack(stack) >= stack->capacity) {
-        expandStack(stack);
-    }
-
-    stack->topIndex++;
-    stack->values[stack->topIndex] = val;
+    addAtHead(stack->pList, (void*) val);
 }
 
 StackVal pop(Stack* stack) {
@@ -60,28 +37,32 @@ StackVal pop(Stack* stack) {
         exit(-1);
     }
 
-    val = stack->values[stack->topIndex];
-    stack->topIndex--;
+    val = (StackVal) (stack->pList->pHead->data);
+    removeAtHead(stack->pList);
+
     return val;
 }
 
 StackVal peek(Stack* stack) {
+    StackVal val;
+
     if (numItemsInStack(stack) <= 0) {
         fprintf(stderr, "Attempted to peek from empty stack! Exiting...\n");
         exit(-1);
     }
 
-    return stack->values[stack->topIndex];
+    return (StackVal) (stack->pList->pHead->data);
 }
 
 void printStack(Stack* stack) {
     int i;
-    for (i = 0; i <= stack->topIndex; i++) {
-        if (i > 0) {
-            printf(", ");
-        }
 
-        printf("%d", stack->values[i]);
+    if (stack->pList->length > 0) {
+        printf("%d", (int) get(stack->pList, 0)->data);
     }
+    for (i = 1; i < stack->pList->length; i++) {
+        printf(", %d", (int) get(stack->pList, i)->data);
+    }
+
     printf("\n");
 }
